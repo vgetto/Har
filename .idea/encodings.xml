@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/AddOrEditScheduleComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/AddOrEditTriggerComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/HistoryDetailComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/HistoryListComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/ScheduleListComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/TriggerListComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/AddOrEditScheduleModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/AddOrEditTriggerModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/HistoryDetailModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/HistoryListModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/ScheduleListModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/TriggerListModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historydetail/HistoryDetailController.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historydetail/HistoryDetailLayout.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historydetail/HistoryDetailPresenter.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historylist/HistoryAdapter.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historylist/HistoryListController.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historylist/HistoryListLayout.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historylist/HistoryListPresenter.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/schedulelist" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/triggerlist/TriggerAdapter.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/triggerlist/TriggerListController.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/triggerlist/TriggerListLayout.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/triggerlist/TriggerListPresenter.java" charset="windows-1250" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
