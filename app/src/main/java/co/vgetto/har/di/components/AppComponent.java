@@ -5,9 +5,10 @@ import co.vgetto.har.audio.RecordAudioService;
 import co.vgetto.har.db.DbModule;
 import co.vgetto.har.di.modules.AppModule;
 import co.vgetto.har.di.modules.MainActivityModule;
-import co.vgetto.har.di.modules.ManagerModule;
+import co.vgetto.har.di.modules.RxServicesModule;
 import co.vgetto.har.di.modules.NetworkModule;
 import co.vgetto.har.di.scopes.ApplicationScope;
+import co.vgetto.har.receivers.BaseCallReceiver;
 import co.vgetto.har.syncadapter.SyncAdapter;
 import co.vgetto.har.syncadapter.SyncObserver;
 import co.vgetto.har.syncadapter.provider.HarProvider;
@@ -18,7 +19,7 @@ import dagger.Component;
  */
 @ApplicationScope @Component(
     modules = {
-        AppModule.class, NetworkModule.class, ManagerModule.class, DbModule.class
+        AppModule.class, NetworkModule.class, RxServicesModule.class, DbModule.class
     }) public interface AppComponent {
 
   MainActivityComponent plus(MainActivityModule mainActivityModule);
@@ -32,4 +33,7 @@ import dagger.Component;
   void inject(AlarmBroadcastReceiver receiver);
 
   void inject(HarProvider provider);
+
+  void inject(BaseCallReceiver baseCallReceiver);
+
 }

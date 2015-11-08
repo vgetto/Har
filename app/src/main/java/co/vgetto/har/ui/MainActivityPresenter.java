@@ -10,7 +10,6 @@ public class MainActivityPresenter {
   public MainActivityPresenter() {
   }
 
-
   public int getLayoutByItemId(int itemId) {
     Timber.i("Izvodim getLayoutByItemId na - " + Thread.currentThread().getName());
     int viewId;

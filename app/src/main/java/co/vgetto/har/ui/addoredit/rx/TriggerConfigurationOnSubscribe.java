@@ -31,7 +31,9 @@ public class TriggerConfigurationOnSubscribe
       implements Observable.OnSubscribe<TriggerConfigurationModel> {
   @Bind(R.id.spinnerTriggerType) Spinner spinnerTriggerType;
 
-  @Bind(R.id.etTriggerNumber) EditText etTriggerNumber;
+  @Bind(R.id.etPhoneNumber) EditText etPhoneNumber;
+
+  @Bind(R.id.etSmsText) EditText etSmsText;
 
   private Subscriber subscriber;
   private TriggerConfigurationModel triggerConfigurationModel;
@@ -48,7 +50,8 @@ public class TriggerConfigurationOnSubscribe
       this.triggerConfigurationModel = model;
       // todo vidi jel ovo dobro
       spinnerTriggerType.setSelection(model.getType());
-      etTriggerNumber.setText(model.getPhoneNumber());
+      etPhoneNumber.setText(model.getPhoneNumber());
+      etSmsText.setText(model.getSmsText());
     }
   }
 
@@ -59,15 +62,15 @@ public class TriggerConfigurationOnSubscribe
 
   public void createObservable() {
     Observable.combineLatest(RxAdapterView.itemSelections(spinnerTriggerType),
-        RxTextView.textChangeEvents(etTriggerNumber),
-        (Integer type, TextViewTextChangeEvent numberChange) -> {
-          Timber.i("SPINNER event -> " + type.toString());
+        RxTextView.textChangeEvents(etPhoneNumber), RxTextView.textChangeEvents(etSmsText), (Integer type, TextViewTextChangeEvent
+            numberChange, TextViewTextChangeEvent smsChange) -> {
           triggerConfigurationModel.setType(type);
+          // TODO based on type, hide/show etSmsText, also enable/disable next based on this
           triggerConfigurationModel.setPhoneNumber(numberChange.text().toString());
-          AdapterView<SpinnerAdapter> adapterView = spinnerTriggerType;
-          long id = adapterView.getSelectedItemId();
-          Timber.i("SPINNER SELECTED ID -> " + Long.toString(id));
+          triggerConfigurationModel.setSmsText(smsChange.text().toString());
           return triggerConfigurationModel;
+          //AdapterView<SpinnerAdapter> adapterView = spinnerTriggerType;
+          //long id = adapterView.getSelectedItemId();
         }).subscribe(confModel -> subscriber.onNext(confModel));
   }
 }

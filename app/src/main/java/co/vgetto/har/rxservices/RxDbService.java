@@ -20,6 +20,7 @@ import rx.Observable;
  * Created by Kovje on 28.10.2015..
  */
 public class RxDbService {
+  // todo make other db related services extends this one, make it base
   private final ContentResolver contentResolver;
   private final BriteContentResolver briteContentResolver;
 
@@ -48,8 +49,7 @@ public class RxDbService {
    * @param input
    * @return
    */
-  @RxLogObservable
-  public QueryObservable getQueryObservable(Class input) {
+  public final QueryObservable getQueryObservable(Class input) {
     Pair<Uri, String[]> queryData = getUriAndProjectionForClass(input);
     return briteContentResolver.createQuery(queryData.first, queryData.second, null, null, null,
         true);
@@ -58,8 +58,7 @@ public class RxDbService {
   /**
    *  return cursor based on Class, selection, selection args and sort order
    */
-  @RxLogObservable
-  public Observable<Cursor> get(Class c, String selection, String[] selectionArgs, String sortOrder) {
+  public final Observable<Cursor> get(Class c, String selection, String[] selectionArgs, String sortOrder) {
     Pair<Uri, String[]> uriProjection = getUriAndProjectionForClass(c);
     return Observable.just(
         contentResolver.query(uriProjection.first, uriProjection.second, selection, selectionArgs,
@@ -69,8 +68,7 @@ public class RxDbService {
   /**
    * return ID for inserted item
    */
-  @RxLogObservable
-  public Observable<Long> insert(Class c, ContentValues values) {
+  public final Observable<Long> insert(Class c, ContentValues values) {
     return Observable.just(contentResolver.insert(getUriAndProjectionForClass(c).first, values))
         .map(uri -> Long.valueOf(uri.getLastPathSegment()));
   }
@@ -78,8 +76,7 @@ public class RxDbService {
   /**
    *  delete row(s) base on class type, selection and selection args, return number of rows affected, should be only 1
    */
-  @RxLogObservable
-  public Observable<Integer> delete(Class c, String selection, String[] selectionArgs) {
+  public final Observable<Integer> delete(Class c, String selection, String[] selectionArgs) {
     return Observable.just(
         contentResolver.delete(getUriAndProjectionForClass(c).first, selection, selectionArgs));
   }
@@ -87,12 +84,10 @@ public class RxDbService {
   /**
    * edit row based on class, values, selection and selection args
    */
-  @RxLogObservable
-  public Observable<Integer> edit(Class c, ContentValues values, String selection,
+  public final Observable<Integer> edit(Class c, ContentValues values, String selection,
       String[] selectionArgs) {
     return Observable.just(
         contentResolver.update(getUriAndProjectionForClass(c).first, values, selection,
             selectionArgs));
   }
-
 }

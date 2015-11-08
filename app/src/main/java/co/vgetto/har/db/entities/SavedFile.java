@@ -8,9 +8,7 @@ import auto.parcel.AutoParcel;
  */
 @AutoParcel public abstract class SavedFile implements Parcelable {
   public abstract String filePath();
-
   public abstract long recordingEndedTime();
-
   public abstract boolean synced();
 
   public static SavedFile create(String filePath, long recordingEndedTime, boolean synced) {

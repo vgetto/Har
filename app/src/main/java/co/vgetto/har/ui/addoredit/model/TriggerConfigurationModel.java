@@ -10,19 +10,22 @@ import co.vgetto.har.db.entities.configurations.TriggerConfiguration;
 public class TriggerConfigurationModel {
   private int type;
   private String phoneNumber;
+  private String smsText;
 
   public TriggerConfigurationModel() {
 
   }
 
-  public TriggerConfigurationModel(int type, String phoneNumber) {
+  public TriggerConfigurationModel(int type, String phoneNumber, String smsText) {
     this.type = type;
     this.phoneNumber = phoneNumber;
+    this.smsText = smsText;
   }
 
   public static TriggerConfigurationModel fromTrigger(Trigger trigger) {
     TriggerConfiguration triggerConfiguration = trigger.triggerConfiguration();
-    return new TriggerConfigurationModel(triggerConfiguration.type(), triggerConfiguration.number());
+    return new TriggerConfigurationModel(triggerConfiguration.type(),
+        triggerConfiguration.phoneNumber(), triggerConfiguration.smsText());
   }
 
   public int getType() {
@@ -39,5 +42,13 @@ public class TriggerConfigurationModel {
 
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
+  }
+
+  public String getSmsText() {
+    return smsText;
+  }
+
+  public void setSmsText(String smsText) {
+    this.smsText = smsText;
   }
 }

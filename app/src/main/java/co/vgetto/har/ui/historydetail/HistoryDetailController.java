@@ -42,7 +42,7 @@ public class HistoryDetailController implements BaseController {
     if (savedModel != null) {
       this.model = (HistoryDetailModel)savedModel;
     } else {
-      this.model = (HistoryDetailModel)new HistoryDetailModel();
+      this.model = new HistoryDetailModel();
     }
     mainActivityController.setTitle("History detail");
     setQuerySubscription();
@@ -56,7 +56,7 @@ public class HistoryDetailController implements BaseController {
 
   }
 
-  public void setQuerySubscription() {
+  private void setQuerySubscription() {
     querySubscription = rxHistoryService.getHistoryQueryObservable()
         .map(histories -> {
           for (History h : histories) {

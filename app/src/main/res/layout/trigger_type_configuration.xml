@@ -2,20 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerTriggerType"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/etTriggerNumber"
-        android:layout_gravity="center_horizontal"
-        android:hint="Trigger number"
-        />
+  <Spinner
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/spinnerTriggerType"
+      />
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="phone"
+      android:ems="10"
+      android:id="@+id/etPhoneNumber"
+      android:layout_gravity="center_horizontal"
+      android:hint="Phone number"
+      />
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="phone"
+      android:ems="10"
+      android:id="@+id/etSmsText"
+      android:layout_gravity="center_horizontal"
+      android:hint="Sms text"
+      />
 </LinearLayout>

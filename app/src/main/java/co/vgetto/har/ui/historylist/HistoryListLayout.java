@@ -1,6 +1,7 @@
 package co.vgetto.har.ui.historylist;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,10 +44,11 @@ public class HistoryListLayout extends FrameLayout implements HistoryListControl
 
   @Bind(R.id.fabBtn) FloatingActionButton fab;
 
-  public LinearLayoutManager linearLayoutManager;
+  private LinearLayoutManager linearLayoutManager;
 
   private LayoutInflater inflater;
 
+  private Parcelable listSaveInstance;
 
   public HistoryListLayout(Context context) {
     this(context, null);
@@ -110,7 +112,11 @@ public class HistoryListLayout extends FrameLayout implements HistoryListControl
 
 
   @Override public void setAdapterData(List<History> history) {
+    // todo add save instance on configuration change in layout's where there is a list !
+    listSaveInstance = recyclerView.getLayoutManager().onSaveInstanceState();//save
     recyclerView.setAdapter(new HistoryAdapter(this, history));
+    recyclerView.getLayoutManager().onRestoreInstanceState(listSaveInstance);//restore
+
   }
 
   @Override public void cardClicked(History h) {

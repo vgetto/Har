@@ -39,7 +39,7 @@ public class AddOrEditTriggerPresenter implements BaseAddEditPresenter {
 
     TriggerConfiguration c =
         TriggerConfiguration.create(model.getTriggerConfigurationModel().getType(),
-            model.getTriggerConfigurationModel().getPhoneNumber(), recordingConfiguration,
+            model.getTriggerConfigurationModel().getPhoneNumber(), model.getTriggerConfigurationModel().getSmsText(), recordingConfiguration,
             uploadConfiguration);
 
     if (model.getLayoutType() == BaseAddEditModel.LAYOUT_TYPE_EDIT) {

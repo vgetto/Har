@@ -125,7 +125,7 @@ public class TriggerAdapter extends RecyclerView.Adapter<TriggerAdapter.ViewHold
 
         Trigger t = triggers.get(position);
 
-        holder.tvTriggerInfo.setText(t.triggerConfiguration().number());
+        holder.tvTriggerInfo.setText(t.triggerConfiguration().phoneNumber());
         holder.tvStatus.setText(t.toString());
     }
 

@@ -13,9 +13,20 @@ import rx.functions.Func1;
  * Created by Kovje on 21.8.2015..
  */
 @AutoParcel public abstract class History implements Parcelable {
+  public static final int HISTORY_TYPE_SCHEDULE = 0;
+  public static final int HISTORY_TYPE_TRIGGER = 1;
+
+  public static final int HISTORY_STATE_RECORDING = 2;
+  public static final int HISTORY_STATE_SUCCESSFUL = 3;
+  public static final int HISTORY_STATE_ERROR_WHEN_RECORDING = -1;
+
+  public static final String selectionByForeignIdAndType =
+      HistoryTable.FOREIGN_ID + " = ? AND " + HistoryTable.TYPE + " = ?";
+  public static final String selectionById = HistoryTable.ID + " = ?";
+
   public abstract long id(); // history event id
 
-  public abstract long foreignId();
+  public abstract long foreignId(); // id in schedule/trigger table
 
   public abstract int type(); // type 0 - schedule, 1 trigger
 
@@ -27,40 +38,33 @@ import rx.functions.Func1;
 
   public abstract List<SavedFile> savedFiles(); // list of file paths to saved files
 
-  public static int HISTORY_TYPE_SCHEDULE = 0;
-  public static int HISTORY_TYPE_TRIGGER = 1;
+  public static History create(long id, long foreignId, int type, int state,
+      long startedRecordingDate, long endedRecordingDate, List<SavedFile> savedFiles) {
+    return new AutoParcel_History(id, foreignId, type, state, startedRecordingDate,
+        endedRecordingDate, savedFiles);
+  }
 
-  public static int HISTORY_STATE_RECORDING = 2;
-  public static int HISTORY_STATE_SUCCESSFUL = 3;
-  public static int HISTORY_STATE_ERROR_WHEN_RECORDING = -1;
+  public static History getHistoryFromCursor(Cursor cursor) {
+    long id = Db.getLong(cursor, HistoryTable.ID);
+    long foreignId = Db.getLong(cursor, HistoryTable.FOREIGN_ID);
+    int type = Db.getInt(cursor, HistoryTable.TYPE);
+    int state = Db.getInt(cursor, HistoryTable.STATE);
+    long startedRecordingDate = Db.getLong(cursor, HistoryTable.STARTED_RECORDING_DATE);
+    long endedRecordingDate = Db.getLong(cursor, HistoryTable.ENDED_RECORDING_DATE);
+    List<SavedFile> savedFiles =
+        Db.convertStringToSavedFilesList(Db.getString(cursor, HistoryTable.SAVED_FILES));
 
-  public static final String selectionByForeignIdAndType = HistoryTable.FOREIGN_ID + " = ? AND " + HistoryTable.TYPE + " = ?";
-
-  public static final String selectionById = HistoryTable.ID + " = ?";
-
-  public static History create(long id,long foreignId, int type, int state, long startedRecordingDate,
-      long endedRecordingDate, List<SavedFile> savedFiles) {
-    return new AutoParcel_History(id, foreignId, type, state, startedRecordingDate, endedRecordingDate,
-        savedFiles);
+    return new AutoParcel_History(id, foreignId, type, state, startedRecordingDate,
+        endedRecordingDate, savedFiles);
   }
 
   public static final Func1<Cursor, History> SINGLE_MAPPER = new Func1<Cursor, History>() {
     @Override public History call(Cursor cursor) {
       if (cursor.getCount() > 0) {
         cursor.moveToFirst();
-
-        long id = Db.getLong(cursor, HistoryTable.ID);
-        long foreignId = Db.getLong(cursor, HistoryTable.FOREIGN_ID);
-        int type = Db.getInt(cursor, HistoryTable.TYPE);
-        int state = Db.getInt(cursor, HistoryTable.STATE);
-        long startedRecordingDate = Db.getLong(cursor, HistoryTable.STARTED_RECORDING_DATE);
-        long endedRecordingDate = Db.getLong(cursor, HistoryTable.ENDED_RECORDING_DATE);
-        List<SavedFile> savedFiles = Db.convertStringToSavedFilesList(
-            Db.getString(cursor, HistoryTable.SAVED_FILES));
-
+        History h = getHistoryFromCursor(cursor);
         cursor.close();
-
-        return new AutoParcel_History(id, foreignId, type, state, startedRecordingDate, endedRecordingDate, savedFiles);
+        return h;
       }
       cursor.close();
       return null;
@@ -69,16 +73,7 @@ import rx.functions.Func1;
 
   public static final Func1<Cursor, History> BRITE_MAPPER = new Func1<Cursor, History>() {
     @Override public History call(Cursor cursor) {
-      long id = Db.getLong(cursor, HistoryTable.ID);
-      long foreignId = Db.getLong(cursor, HistoryTable.FOREIGN_ID);
-      int type = Db.getInt(cursor, HistoryTable.TYPE);
-      int state = Db.getInt(cursor, HistoryTable.STATE);
-      long startedRecordingDate = Db.getLong(cursor, HistoryTable.STARTED_RECORDING_DATE);
-      long endedRecordingDate = Db.getLong(cursor, HistoryTable.ENDED_RECORDING_DATE);
-      List<SavedFile> savedFiles = Db.convertStringToSavedFilesList(
-          Db.getString(cursor, HistoryTable.SAVED_FILES));
-
-      return new AutoParcel_History(id, foreignId, type, state, startedRecordingDate, endedRecordingDate, savedFiles);
+      return getHistoryFromCursor(cursor);
     }
   };
 
@@ -114,7 +109,6 @@ import rx.functions.Func1;
       values.put(HistoryTable.STATE, state);
       return this;
     }
-
 
     public ContentValuesBuilder startedRecordingDate(long startedRecordingDate) {
       values.put(HistoryTable.STARTED_RECORDING_DATE, startedRecordingDate);

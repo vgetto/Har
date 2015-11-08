@@ -1,9 +1,7 @@
 <resources>
   <string name="app_name">Har</string>
-
   <string name="hello_world">Hello world!</string>
   <string name="action_settings">Settings</string>
-
   <string name="sign_out_label">Sign out</string>
 
   <string name="navigation_schedules">Schedules</string>
@@ -11,12 +9,11 @@
   <string name="navigation_settings">Settings</string>
   <string name="navigation_history">History</string>
 
-<!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
   <string-array name="trigger_type_spinner">
-    <item>On incoming call</item>
-    <item>On missed call</item>
-    <item>On call ended</item>
-    <item>On sms</item>
+    <item>On received sms</item>
+    <item>After missed call</item>
+    <item>After outgoing call</item>
+    <item>After incoming call</item>
   </string-array>
 </resources>

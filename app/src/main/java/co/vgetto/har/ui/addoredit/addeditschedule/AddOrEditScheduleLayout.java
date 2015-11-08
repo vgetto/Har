@@ -51,6 +51,9 @@ public class AddOrEditScheduleLayout extends LinearLayout implements BaseAddEdit
 
   private final List<View> pageList = new ArrayList<>();
 
+  private BaseModel model;
+
+
   public AddOrEditScheduleLayout(Context context, BaseModel model) {
     this(context, null, model);
   }
@@ -63,6 +66,7 @@ public class AddOrEditScheduleLayout extends LinearLayout implements BaseAddEdit
   public AddOrEditScheduleLayout(Context context, AttributeSet attrs, int defStyleAttr,
       BaseModel model) {
     super(context, attrs, defStyleAttr);
+    this.model = model;
     // inflate base scheduleConfiguration layout, empty linear layout and 2 buttons under it
     LayoutInflater.from(context).inflate(R.layout.configuration_layout, this, true);
 
@@ -79,12 +83,11 @@ public class AddOrEditScheduleLayout extends LinearLayout implements BaseAddEdit
     pageList.add(inflater.inflate(R.layout.time_picker_layout, null));
     pageList.add(inflater.inflate(R.layout.recording_configuration_layout, null));
     pageList.add(inflater.inflate(R.layout.upload_configuration_layout, null));
-
-    controller.init(model);
   }
 
   @Override protected void onAttachedToWindow() {
     super.onAttachedToWindow();
+    controller.init(model);
     setButtonSubscriptions();
   }
 

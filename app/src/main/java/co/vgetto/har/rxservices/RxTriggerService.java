@@ -26,7 +26,7 @@ public final class RxTriggerService {
    *  returns and observable that emit's a list of items every time trigger table is updated
    *  as long a subscription to this observable is alive
    */
-  public Observable<List<Trigger>> getTriggerQueryObservable() {
+  public final Observable<List<Trigger>> getTriggerQueryObservable() {
     return rxDbService.getQueryObservable(Trigger.class).mapToList(Trigger.BRITE_MAPPER);
   }
 
@@ -35,24 +35,27 @@ public final class RxTriggerService {
    * @param id
    * @return
    */
-  public Observable<Trigger> getTriggerById(long id) {
+  public final Observable<Trigger> getTriggerById(long id) {
     return rxDbService.get(Trigger.class, Trigger.selectionById, Db.getSelectionArgsForId(id), null)
         .map(Trigger.SINGLE_MAPPER);
   }
 
   // no comments needed for these methods..
 
-  public Observable<Long> insertTrigger(ContentValues values) {
+  public final Observable<Long> insertTrigger(ContentValues values) {
     return rxDbService.insert(Trigger.class, values);
   }
 
-  public Observable<Integer> editTrigger(ContentValues values) {
+  public final Observable<Integer> editTrigger(ContentValues values) {
     return rxDbService.edit(Trigger.class, values, Trigger.selectionById,
         Db.getSelectionArgsForId(values.getAsLong(TriggersTable.ID)));
   }
 
-  public Observable<Integer> deleteTrigger(long id) {
-    return rxDbService.delete(Trigger.class, Trigger.selectionById,
-        Db.getSelectionArgsForId(id));
+  public final Observable<Integer> deleteTrigger(long id) {
+    return rxDbService.delete(Trigger.class, Trigger.selectionById, Db.getSelectionArgsForId(id));
+  }
+  
+  public final Observable<Trigger> findTriggerByTypeAndPhoneNumber(int type, String phoneNumber) {
+    return rxDbService.get(Trigger.class, Trigger.selectionByTypeAndPhoneNumber, Db.getSelectionArgsForTypeAndPhoneNumber(type, phoneNumber), null).map(Trigger.SINGLE_MAPPER);
   }
 }

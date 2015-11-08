@@ -3,10 +3,12 @@ package co.vgetto.har.di.modules;
 import android.app.AlarmManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import co.vgetto.har.rxservices.RxDbService;
 import co.vgetto.har.rxservices.RxHistoryService;
 import co.vgetto.har.rxservices.RxScheduleService;
 import co.vgetto.har.di.scopes.ApplicationScope;
+import co.vgetto.har.rxservices.RxSharedPreferences;
 import co.vgetto.har.rxservices.RxTriggerService;
 import com.squareup.sqlbrite.BriteContentResolver;
 import dagger.Module;
@@ -15,7 +17,7 @@ import dagger.Provides;
 /**
  * Created by Kovje on 23.8.2015..
  */
-@Module public class ManagerModule {
+@Module public class RxServicesModule {
   @Provides @ApplicationScope RxDbService providesRxDbService(ContentResolver resolver,
       BriteContentResolver briteContentResolver) {
     return new RxDbService(resolver, briteContentResolver);
@@ -32,5 +34,9 @@ import dagger.Provides;
 
   @Provides @ApplicationScope RxHistoryService provdesRxHistoryService(Context context, RxDbService rxDbService) {
     return new RxHistoryService(context, rxDbService);
+  }
+
+  @Provides @ApplicationScope RxSharedPreferences providesRxSharedPreferences(SharedPreferences sharedPreferences) {
+    return new RxSharedPreferences(sharedPreferences);
   }
 }

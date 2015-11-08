@@ -25,6 +25,8 @@
 
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
+    <uses-permission android:name="android.provider.Telephony.NEW_OUTGOING_SMS" />
+
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <application
@@ -97,11 +99,11 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receivers.SMSReceiver"
-            android:exported="true"
-            android:permission="android.permission.BROADCAST_SMS">
-            <intent-filter android:priority="500">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+
+        <receiver android:name=".receivers.SMSReceiver" android:enabled="true">
+            <intent-filter android:priority="1000">
+            <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            <action android:name="android.provider.Telephony.SMS_SENT" />
             </intent-filter>
         </receiver>
 

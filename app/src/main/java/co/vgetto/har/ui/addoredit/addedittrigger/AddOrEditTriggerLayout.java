@@ -22,6 +22,7 @@ import co.vgetto.har.ui.addoredit.base.BaseAddEditLayout;
 import co.vgetto.har.ui.base.BaseController;
 import co.vgetto.har.ui.base.BaseModel;
 import com.jakewharton.rxbinding.view.RxView;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -51,6 +52,8 @@ public class AddOrEditTriggerLayout extends LinearLayout implements BaseAddEditL
 
   private final List<View> pageList = new ArrayList<>();
 
+  private BaseModel model;
+
   public AddOrEditTriggerLayout(Context context, BaseModel model) {
     this(context, null, model);
   }
@@ -62,6 +65,7 @@ public class AddOrEditTriggerLayout extends LinearLayout implements BaseAddEditL
   public AddOrEditTriggerLayout(Context context, AttributeSet attrs, int defStyleAttr,
       BaseModel model) {
     super(context, attrs, defStyleAttr);
+    this.model = model;
     // inflate base scheduleConfiguration layout, empty linear layout and 2 buttons under it
     LayoutInflater.from(context).inflate(R.layout.configuration_layout, this, true);
 
@@ -77,13 +81,11 @@ public class AddOrEditTriggerLayout extends LinearLayout implements BaseAddEditL
     pageList.add(inflater.inflate(R.layout.trigger_type_configuration, null));
     pageList.add(inflater.inflate(R.layout.recording_configuration_layout, null));
     pageList.add(inflater.inflate(R.layout.upload_configuration_layout, null));
-
-    // todo , try to move init to onAttached() to it sets the title after configuration change
-    controller.init(model);
   }
 
   @Override protected void onAttachedToWindow() {
     super.onAttachedToWindow();
+    controller.init(model);
     setButtonSubscriptions();
   }
 

@@ -1,6 +1,7 @@
 package co.vgetto.har.db;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import co.vgetto.har.db.entities.SavedFile;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,6 @@ public final class Db {
   private static String OBJECT_SEPARATOR = "__-__";
 
   public static final int BOOLEAN_FALSE = 0;
-
   public static final int BOOLEAN_TRUE = 1;
 
   public static final String[] getSelectionArgsForId(long id) {
@@ -27,6 +27,13 @@ public final class Db {
     String[] args = new String[2];
     args[0] = Long.toString(foreignId);
     args[1] = Integer.toString(type);
+    return args;
+  }
+
+  public static final String[] getSelectionArgsForTypeAndPhoneNumber(int type, String phoneNumber) {
+    String[] args = new String[2];
+    args[0] = Integer.toString(type);
+    args[1] = phoneNumber;
     return args;
   }
 
@@ -66,21 +73,9 @@ public final class Db {
     } else {
       return "";
     }
-    /*
-    StringBuffer stringBuffer = new StringBuffer();
-    for (String str : stringList) {
-      stringBuffer.append(str).append(ITEM_SEPARATOR);
-    }
-
-    // Remove last separator
-    int lastIndex = stringBuffer.lastIndexOf(ITEM_SEPARATOR);
-    stringBuffer.delete(lastIndex, lastIndex + ITEM_SEPARATOR.length() + 1);
-
-    return stringBuffer.toString();
-    */
   }
 
-  public static List<SavedFile> convertStringToSavedFilesList(String str) {
+  public static List<SavedFile> convertStringToSavedFilesList(@NonNull String str) {
     List<SavedFile> savedFiles = new ArrayList<>();
     // if there are some files already, return them as list of SavedFile objects
     if (!str.equals("")) {
