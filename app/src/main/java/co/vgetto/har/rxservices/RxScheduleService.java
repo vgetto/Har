@@ -64,7 +64,7 @@ public final class RxScheduleService {
   /**
    * edit's a schedule based on content values
    * first it cancel's the alarm for the start time that is currently in db, then it edit's the data
-   * in db with new data from content values, and finally it set's the alarm for
+   * in db with new data from content values, and finally it set's the alarm
    */
   public Observable<Boolean> editSchedule(ContentValues values) {
     long id = values.getAsLong(SchedulesTable.ID);

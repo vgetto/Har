@@ -29,12 +29,12 @@ public class StorageHelper {
         return dir.getPath();
     }
 
-    public static String getAudioFileName(String directory, String fileName) {
+    public static String getAudioFilePath(String directory, String fileName) {
         String file;
         Long tsLong = System.currentTimeMillis() / 1000;
         String timeStamp = tsLong.toString();
 
-        file = getDirectoryPath(directory, AUDIO_FILE) + File.separator + fileName + "_" + timeStamp + ".3gp";
+        file = getDirectoryPath(directory, AUDIO_FILE) + File.separator + fileName + "_" + timeStamp +  ".mp3";//".3gp";
         return file;
     }
 }

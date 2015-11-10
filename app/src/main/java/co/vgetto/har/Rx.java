@@ -9,7 +9,6 @@ import rx.schedulers.Schedulers;
  * Created by Kovje on 27.8.2015..
  */
 public class Rx {
-  // todo move to another class
   public static <T> Observable.Transformer<T, T> schedulersIoUi() {
     return observable -> observable.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread());

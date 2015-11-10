@@ -1,11 +1,13 @@
 package co.vgetto.har.di.modules;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import co.vgetto.har.rxservices.RxDbService;
 import co.vgetto.har.rxservices.RxHistoryService;
+import co.vgetto.har.rxservices.RxNotificationService;
 import co.vgetto.har.rxservices.RxScheduleService;
 import co.vgetto.har.di.scopes.ApplicationScope;
 import co.vgetto.har.rxservices.RxSharedPreferences;
@@ -38,5 +40,9 @@ import dagger.Provides;
 
   @Provides @ApplicationScope RxSharedPreferences providesRxSharedPreferences(SharedPreferences sharedPreferences) {
     return new RxSharedPreferences(sharedPreferences);
+  }
+
+  @Provides @ApplicationScope RxNotificationService providesRxNotificationService(Context context, NotificationManager notificationManager) {
+    return new RxNotificationService(context, notificationManager);
   }
 }

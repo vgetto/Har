@@ -4,10 +4,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlarmManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.v4.app.NotificationManagerCompat;
 import co.vgetto.har.Constants;
 import co.vgetto.har.di.scopes.ApplicationScope;
 import co.vgetto.har.syncadapter.SyncObserver;
@@ -53,7 +55,6 @@ import timber.log.Timber;
 
     Account[] existing = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
 
-
     for (Account a : existing) {
       if (a.equals(newAccount)) {
         Timber.i("Account already exists");
@@ -61,7 +62,6 @@ import timber.log.Timber;
         return a;
       }
     }
-
 
     //TODO check possible error here!
     if (accountManager.addAccountExplicitly(newAccount, null, null)) {
@@ -101,4 +101,7 @@ import timber.log.Timber;
     return new Date();
   }
 
+  @Provides @ApplicationScope NotificationManager providesNotificationManager(Context context) {
+    return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+  }
 }

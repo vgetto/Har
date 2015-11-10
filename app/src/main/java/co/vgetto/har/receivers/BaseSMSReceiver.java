@@ -31,7 +31,7 @@ public abstract class BaseSMSReceiver extends BroadcastReceiver {
 
   @Override public void onReceive(Context context, Intent intent) {
     String action = intent.getAction();
-    if (action != null && (action.equals(ACTION_SMS_RECEIVED) || action.equals(ACTION_SMS_SENT))) {
+    if (action != null && action.equals(ACTION_SMS_RECEIVED)) {
       Pair<String, String> smsData = getSmsData(intent.getExtras());
       onIncomingSMS(context, smsData.first, smsData.second);
       //Timber.i(action + " " + smsData.first + " : " + smsData.second);

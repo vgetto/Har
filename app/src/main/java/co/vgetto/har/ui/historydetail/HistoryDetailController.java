@@ -72,6 +72,7 @@ public class HistoryDetailController implements BaseController {
           if (historyItem != null) {
             iTalkToHistoryDetailLayout.setData(historyItem);
           }
+          // todo show error, but error shouldn't happen !
         });
   }
 
