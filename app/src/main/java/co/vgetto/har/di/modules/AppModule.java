@@ -13,6 +13,9 @@ import android.support.v4.app.NotificationManagerCompat;
 import co.vgetto.har.Constants;
 import co.vgetto.har.di.scopes.ApplicationScope;
 import co.vgetto.har.syncadapter.SyncObserver;
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AppKeyPair;
 import dagger.Module;
 import dagger.Provides;
 import java.util.Calendar;
@@ -43,7 +46,9 @@ import timber.log.Timber;
     return application;
   }
 
-  @Provides @ApplicationScope ContentResolver providesContentResolver(Context context) {
+  @Provides @ApplicationScope ContentResolver providesContentResolver(Context context,
+      Account account) {
+    ContentResolver.setSyncAutomatically(account, Constants.AUTHORITY, true);
     return context.getContentResolver();
   }
 
@@ -58,7 +63,6 @@ import timber.log.Timber;
     for (Account a : existing) {
       if (a.equals(newAccount)) {
         Timber.i("Account already exists");
-        //ContentResolver.setSyncAutomatically(a, Constants.AUTHORITY, true);
         return a;
       }
     }
@@ -66,7 +70,6 @@ import timber.log.Timber;
     //TODO check possible error here!
     if (accountManager.addAccountExplicitly(newAccount, null, null)) {
       Timber.i("addAccount explicitly");
-      //ContentResolver.setSyncAutomatically(newAccount, Constants.AUTHORITY, true);
       return newAccount;
     } else {
             /*
@@ -104,4 +107,18 @@ import timber.log.Timber;
   @Provides @ApplicationScope NotificationManager providesNotificationManager(Context context) {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
   }
+
+  @Provides @ApplicationScope AppKeyPair providesAppKeyPair() {
+    return new AppKeyPair(Constants.APP_KEY, Constants.APP_SECRET);
+  }
+
+  /**
+   * // In the class declaration section:
+   private DropboxAPI<AndroidAuthSession> mDBApi;
+
+   // And later in some initialization function:
+   AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
+   AndroidAuthSession session = new AndroidAuthSession(appKeys);
+   mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+   */
 }

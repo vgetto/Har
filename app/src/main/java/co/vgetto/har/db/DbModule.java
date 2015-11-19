@@ -14,12 +14,6 @@ import dagger.Provides;
  * Created by Kovje on 6.9.2015..
  */
 @Module public class DbModule {
-  @Provides @ApplicationScope BriteDatabase providesBriteDatabase(
-      SQLiteOpenHelper sqLiteOpenHelper) {
-    SqlBrite sqlBrite = SqlBrite.create();
-    return sqlBrite.wrapDatabaseHelper(sqLiteOpenHelper);
-  }
-
   @Provides @ApplicationScope BriteContentResolver providesBriteContentResolver(
       ContentResolver resolver) {
     SqlBrite sqlBrite = SqlBrite.create();

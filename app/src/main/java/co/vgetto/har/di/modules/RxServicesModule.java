@@ -12,6 +12,8 @@ import co.vgetto.har.rxservices.RxScheduleService;
 import co.vgetto.har.di.scopes.ApplicationScope;
 import co.vgetto.har.rxservices.RxSharedPreferences;
 import co.vgetto.har.rxservices.RxTriggerService;
+import co.vgetto.har.rxservices.RxUserService;
+import com.dropbox.client2.session.AppKeyPair;
 import com.squareup.sqlbrite.BriteContentResolver;
 import dagger.Module;
 import dagger.Provides;
@@ -44,5 +46,9 @@ import dagger.Provides;
 
   @Provides @ApplicationScope RxNotificationService providesRxNotificationService(Context context, NotificationManager notificationManager) {
     return new RxNotificationService(context, notificationManager);
+  }
+
+  @Provides @ApplicationScope RxUserService providesRxUserService(RxDbService rxDbService, AppKeyPair appKeyPair) {
+    return new RxUserService(rxDbService, appKeyPair);
   }
 }

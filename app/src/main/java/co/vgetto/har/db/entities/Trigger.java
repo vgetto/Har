@@ -56,7 +56,7 @@ import rx.functions.Func1;
     return new AutoParcel_Trigger(id, triggerConfiguration);
   }
 
-  public static final Func1<Cursor, Trigger> SINGLE_MAPPER = new Func1<Cursor, Trigger>() {
+  public static final Func1<Cursor, Trigger>  SINGLE_MAPPER = new Func1<Cursor, Trigger>() {
     @Override public Trigger call(Cursor cursor) {
       if (cursor.getCount() > 0) {
         cursor.moveToFirst();

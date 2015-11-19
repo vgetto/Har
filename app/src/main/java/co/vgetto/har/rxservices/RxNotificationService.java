@@ -31,13 +31,13 @@ public class RxNotificationService {
     return PendingIntent.getActivity(context, id, i, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
-  // todo handle back stack
+  // todo handle stack
   public void newNotification(int historyId, String notificationTitle, String notificationText) {
     Notification notification = notificationBuilder().setSmallIcon(
         android.support.design.R.drawable.notification_template_icon_bg)
         .setContentTitle(notificationTitle)
         .setContentText(notificationText)
-        .setContentIntent(getPendingIntent(historyId))
+//        .setContentIntent(getPendingIntent(historyId))
         .build();
 
     notificationManager.notify(historyId, notification);

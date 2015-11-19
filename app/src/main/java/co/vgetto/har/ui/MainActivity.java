@@ -21,11 +21,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import co.vgetto.har.MyApplication;
 import co.vgetto.har.R;
+import co.vgetto.har.Rx;
 import co.vgetto.har.db.Db;
 import co.vgetto.har.db.entities.SavedFile;
+import co.vgetto.har.db.entities.User;
+import co.vgetto.har.rxservices.RxUserService;
 import co.vgetto.har.ui.backstack.SavedBackstackFragment;
 import co.vgetto.har.ui.backstack.Backstack;
 import co.vgetto.har.ui.base.BaseModel;
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.AppKeyPair;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +49,10 @@ public class MainActivity extends AppCompatActivity
 
   @Inject Backstack backstack;
 
+  @Inject AppKeyPair appKeyPair;
+
+  @Inject RxUserService rxUserService;
+
   @Bind(R.id.drawerLayout) DrawerLayout drawerLayout;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -57,6 +68,8 @@ public class MainActivity extends AppCompatActivity
   private Subscription inflateSubscription;
 
   private SavedBackstackFragment savedBackstackFragment;
+
+  private DropboxAPI<AndroidAuthSession> mDBApi;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -91,6 +104,9 @@ public class MainActivity extends AppCompatActivity
       backstack.restoreInstanceState(this, savedBackstackFragment.getSavedBackstackItems());
     }
 
+    AndroidAuthSession session = new AndroidAuthSession(appKeyPair);
+    mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+
     controller.init(null);
 
     navigationView.setNavigationItemSelectedListener(
@@ -102,7 +118,8 @@ public class MainActivity extends AppCompatActivity
           }
         });
 
-    Typeface roboto = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf"); //use this.getAssets if you are calling from an Activity
+    Typeface roboto = Typeface.createFromAsset(this.getAssets(),
+        "fonts/Roboto-Light.ttf"); //use this.getAssets if you are calling from an Activity
     Field f = null;
     try {
       f = toolbar.getClass().getDeclaredField("mTitleTextView");
@@ -132,6 +149,22 @@ public class MainActivity extends AppCompatActivity
 
   @Override protected void onResume() {
     super.onResume();
+    if (mDBApi.getSession().authenticationSuccessful()) {
+      try {
+        // Required to complete auth, sets the access token on the session
+        mDBApi.getSession().finishAuthentication();
+        String accessToken = mDBApi.getSession().getOAuth2AccessToken();
+        rxUserService.loginToDropbox(new User.ContentValuesBuilder().token(accessToken).email("email").build())
+            .compose(Rx.schedulersIoUi())
+            .doOnCompleted(() -> mDBApi.getSession().unlink())
+            .subscribe(aLong -> Timber.i("Successfully logged in"),
+                e -> Timber.i("Error logging in -> " + e.getMessage()));
+      } catch (IllegalStateException e) {
+        Timber.i("Error authenticating");
+      }
+
+
+    }
   }
 
   @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -193,7 +226,6 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     controller.onActivityResult(requestCode, resultCode, data);
     super.onActivityResult(requestCode, resultCode, data);
@@ -233,7 +265,9 @@ public class MainActivity extends AppCompatActivity
           // check if current view is scheduleConfiguration
           // if it is set arrow, if not remove arrow from toolbar
           // todo call to controler / presenter !
-          if ((backstack.getCurrentViewId() == UiConstants.HISTORY_DETAILS) || (backstack.getCurrentViewId() == UiConstants.ADD_OR_EDIT_SCHEDULE) || (backstack.getCurrentViewId() == UiConstants.ADD_OR_EDIT_TRIGGER)) {
+          if ((backstack.getCurrentViewId() == UiConstants.HISTORY_DETAILS) || (
+              backstack.getCurrentViewId() == UiConstants.ADD_OR_EDIT_SCHEDULE) || (
+              backstack.getCurrentViewId() == UiConstants.ADD_OR_EDIT_TRIGGER)) {
             showArrowInToolbar(true);
           } else {
             showArrowInToolbar(false);
@@ -251,5 +285,9 @@ public class MainActivity extends AppCompatActivity
     } else {
       toolbar.setTitle("Har");
     }
+  }
+
+  @Override public void login() {
+    mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
   }
 }

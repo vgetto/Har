@@ -32,4 +32,5 @@ import dagger.Provides;
   @Provides @MainActivityScope Backstack providesBackstack() {
     return new Backstack();
   }
+
 }

@@ -38,6 +38,7 @@ public class MainActivityController implements BaseController{
     return model;
   }
 
+  public void logIn() { iTalkToMainActivity.login();}
 
   public void setTitle(String title) {
     iTalkToMainActivity.setTitle(title);
@@ -107,6 +108,7 @@ public class MainActivityController implements BaseController{
     void showLayout(int layoutId, int action, BaseModel model);
     void showSnackbar(String snackbarText);
     void setTitle(String title);
+    void login();
   }
 
 }

@@ -1,12 +1,17 @@
 package co.vgetto.har.syncadapter;
 
 import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
+import co.vgetto.har.Constants;
 import co.vgetto.har.MyApplication;
+import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by Kovje on 8.9.2015..
@@ -37,9 +42,13 @@ public class SyncObserver extends ContentObserver {
    * observed content provider changes.
    */
   @Override public void onChange(boolean selfChange, Uri changeUri) {
-    //Bundle b = new Bundle();
-    //b.putString("uri", changeUri.toString());
-    //ContentResolver.requestSync(account, Constants.AUTHORITY, b);
-    // onChange is a do nothing bitch for now
+    List<String> pathSegments = changeUri.getPathSegments();
+    if (pathSegments.size() == 3) {
+      Bundle b = new Bundle();
+      b.putLong("historyId", Long.valueOf(pathSegments.get(0)));
+      b.putInt("positionInList", Integer.valueOf(pathSegments.get(1)));
+      b.putBoolean("deleteAfterUpload", Boolean.valueOf(pathSegments.get(2)));
+      ContentResolver.requestSync(account, Constants.AUTHORITY, b);
+    }
   }
 }

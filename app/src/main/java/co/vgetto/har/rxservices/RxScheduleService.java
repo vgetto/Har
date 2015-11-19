@@ -57,7 +57,7 @@ public final class RxScheduleService {
    */
   @RxLogObservable public Observable<Boolean> addSchedule(ContentValues values) {
     return rxDbService.insert(Schedule.class, values) // insert schedule to db
-        .flatMap(this::getScheduleById) // query inserted schedule
+        .concatMap(this::getScheduleById) // query inserted schedule
         .map(this::setAlarm); // set alarm for this schedule
   }
 
@@ -69,9 +69,9 @@ public final class RxScheduleService {
   public Observable<Boolean> editSchedule(ContentValues values) {
     long id = values.getAsLong(SchedulesTable.ID);
     return Observable.just(id).map(this::cancelAlarm) // emit ID and cancel alarm for that ID
-        .flatMap(alarmCanceled -> rxDbService.edit(Schedule.class, values, Schedule.selectionById,
+        .concatMap(alarmCanceled -> rxDbService.edit(Schedule.class, values, Schedule.selectionById,
             Db.getSelectionArgsForId(id))) // edit schedule in db
-        .flatMap(this::getScheduleById) // get edited schedule from db
+        .concatMap(this::getScheduleById) // get edited schedule from db
         .map(this::setAlarm); // set alarm for new schedule
   }
 
@@ -83,7 +83,7 @@ public final class RxScheduleService {
    */
   public Observable<Integer> deleteSchedule(Schedule schedule) {
     return Observable.just(cancelAlarm(schedule.id())) // cancel alarm
-        .flatMap(canceled -> rxDbService.delete(Schedule.class, Schedule.selectionById,
+        .concatMap(canceled -> rxDbService.delete(Schedule.class, Schedule.selectionById,
             Db.getSelectionArgsForId(schedule.id()))); // delete from db
   }
 

@@ -9,16 +9,24 @@ import android.content.UriMatcher;
 import android.os.Bundle;
 import co.vgetto.har.Constants;
 import co.vgetto.har.MyApplication;
+import co.vgetto.har.db.entities.History;
+import co.vgetto.har.db.entities.SavedFile;
+import co.vgetto.har.rxservices.RxHistoryService;
 import co.vgetto.har.rxservices.RxScheduleService;
+import co.vgetto.har.rxservices.RxUserService;
 import com.squareup.sqlbrite.BriteDatabase;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Created by Kovje on 8.9.2015..
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
-  @Inject RxScheduleService scheduleManager;
-  @Inject BriteDatabase db;
+  @Inject RxUserService rxUserService;
+  @Inject RxHistoryService rxHistoryService;
 
   private static final int CREATE_LOCAL_SCHEDULE = 1;
   private static final int EDIT_LOCAL_SCHEDULE = 2;
@@ -73,7 +81,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
   @Override public void onPerformSync(Account account, Bundle extras, String authority,
       ContentProviderClient provider, SyncResult syncResult) {
+    Timber.i("onPerformSync fired with bundle -> " + extras.toString() + " thread -> "
+        + Thread.currentThread().getName());
+    long historyId = extras.getLong("historyId");
+    int positionInList = extras.getInt("positionInList");
+    boolean deleteAfterUplaod = extras.getBoolean("deleteAfterUpload");
 
+    // get history data from db
+    History currentHistory = rxHistoryService.getHistoryById(historyId).toBlocking().first();
+    List<SavedFile> savedFileList = currentHistory.savedFiles();
+    SavedFile currentFile = savedFileList.get(positionInList);
+
+    // try to upload
+    if (rxUserService.uploadFile(currentFile.filePath(), deleteAfterUplaod)) {
+      // if successful update history
+      Timber.i("Sync successful updating history!");
+      SavedFile updatedFile =
+          SavedFile.create(currentFile.filePath(), currentFile.recordingEndedTime(), true);
+      savedFileList.set(positionInList, updatedFile);
+      History updateHistory =
+          History.create(currentHistory.id(), currentHistory.foreignId(), currentHistory.type(),
+              currentHistory.state(), currentHistory.startedRecordingDate(),
+              currentHistory.endedRecordingDate(), savedFileList);
+      Timber.i("New history -> " + updateHistory.toString());
+      rxHistoryService.editHistory(updateHistory.getContentValues()).toBlocking().first();
+    }
   }
 
   /*

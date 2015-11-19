@@ -9,9 +9,11 @@ import co.vgetto.har.di.modules.RxServicesModule;
 import co.vgetto.har.di.modules.NetworkModule;
 import co.vgetto.har.di.scopes.ApplicationScope;
 import co.vgetto.har.receivers.BaseCallReceiver;
+import co.vgetto.har.receivers.BaseSMSReceiver;
 import co.vgetto.har.syncadapter.SyncAdapter;
 import co.vgetto.har.syncadapter.SyncObserver;
 import co.vgetto.har.syncadapter.provider.HarProvider;
+import co.vgetto.har.ui.settings.SettingsLayout;
 import dagger.Component;
 
 /**
@@ -36,4 +38,5 @@ import dagger.Component;
 
   void inject(BaseCallReceiver baseCallReceiver);
 
+  void inject(BaseSMSReceiver baseSMSReceiver);
 }

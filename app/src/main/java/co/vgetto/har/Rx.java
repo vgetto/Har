@@ -1,6 +1,12 @@
 package co.vgetto.har;
 
 import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.TextView;
+import co.vgetto.har.rxservices.RxTriggerService;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
+import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -22,5 +28,9 @@ public class Rx {
   public static <T> Observable.Transformer<T, T> schedulersUiUi() {
     return observable -> observable.subscribeOn(AndroidSchedulers.mainThread())
         .observeOn(AndroidSchedulers.mainThread());
+  }
+
+  public static Observable<TextViewTextChangeEvent> subscribeToTextChanges(TextView view) {
+    return RxTextView.textChangeEvents(view).debounce(400, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread());
   }
 }

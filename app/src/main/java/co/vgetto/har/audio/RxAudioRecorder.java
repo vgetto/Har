@@ -3,6 +3,7 @@ package co.vgetto.har.audio;
 import android.content.ContentValues;
 import android.content.Context;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import co.vgetto.har.MyApplication;
 import co.vgetto.har.db.entities.History;
 import co.vgetto.har.db.entities.SavedFile;
@@ -10,6 +11,8 @@ import co.vgetto.har.db.entities.Schedule;
 import co.vgetto.har.rxservices.RxHistoryService;
 import co.vgetto.har.rxservices.RxNotificationService;
 import co.vgetto.har.rxservices.RxScheduleService;
+import co.vgetto.har.rxservices.RxUserService;
+import co.vgetto.har.syncadapter.SyncObserver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
@@ -31,6 +35,8 @@ public class RxAudioRecorder {
   @Inject RxHistoryService rxHistoryService;
   @Inject RxScheduleService rxScheduleService;
   @Inject RxNotificationService rxNotificationService;
+  @Inject RxUserService rxUserService;
+  @Inject SyncObserver syncObserver;
 
   private final PublishSubject<Boolean> iTalkToRecordAudioService;
   private PublishSubject<Integer> queueSubject;
@@ -154,15 +160,15 @@ public class RxAudioRecorder {
     return Observable.interval(0,
         intentData.recordingConfiguration().delayBetween() + intentData.recordingConfiguration()
             .duration(), TimeUnit.SECONDS)
-        .flatMap(l -> Observable.just(startMediaRecorder(intentData))
+        // changed flatMap to concatMap, concatMap will always spit out items chronologically
+        .concatMap(l -> Observable.just(startMediaRecorder(intentData))
             .filter(fileName -> fileName != null)
-            .flatMap(fileName -> Observable.zip(
+            .concatMap(fileName -> Observable.zip(
                 Observable.timer(intentData.recordingConfiguration().duration() + 1,
                     TimeUnit.SECONDS), Observable.just(fileName), (Long, String) -> {
                   stopMediaRecorder();
                   return fileName;
-                })))
-        .take(intentData.recordingConfiguration().numOfRecordings());
+                }))).take(intentData.recordingConfiguration().numOfRecordings());
   }
 
   /**
@@ -212,7 +218,20 @@ public class RxAudioRecorder {
           .state(History.HISTORY_STATE_SUCCESSFUL)
           .endedRecordingDate(System.currentTimeMillis())
           .build();
+
       rxHistoryService.editHistoryByForeignId(values).toBlocking().first();
+
+      // if user has chosen to notify on start recording, notify him
+      if (intentData.uploadConfiguration().notifyOnEndRecording()) {
+        String msg;
+        if (intentData.type() == History.HISTORY_TYPE_SCHEDULE) {
+          msg = "Schedule stopped recording";
+        } else {
+          msg = "Trigger stopped recording";
+        }
+        rxNotificationService.newNotification((int) intentData.foreignId(), "Notification", msg);
+      }
+
     };
   }
 
@@ -222,27 +241,57 @@ public class RxAudioRecorder {
   private Action0 onRecordingStarted(IntentData intentData) {
     return () -> {
       Timber.i("Starting new recording session");
-      ContentValues history = new History.ContentValuesBuilder().foreignId(intentData.foreignId())
-          .type(intentData.type())
-          .state(History.HISTORY_STATE_RECORDING)
-          .startedRecordingDate(System.currentTimeMillis())
-          .savedFiles(null)
-          .build();
+      long historyId;
+      // TODO check if trigger or schedule
+      // if trigger check if history already exist, edit other method also
 
-      // create entry in history table, block on it
-      long newHistoryId = rxHistoryService.insertHistory(history).toBlocking().first();
-
-      // if recording session started by schedule, change state of schedule
       if (intentData.type() == History.HISTORY_TYPE_SCHEDULE) {
+        ContentValues history = new History.ContentValuesBuilder().foreignId(intentData.foreignId())
+            .type(intentData.type())
+            .state(History.HISTORY_STATE_RECORDING)
+            .startedRecordingDate(System.currentTimeMillis())
+            .savedFiles(null)
+            .build();
+
+        // create entry in history table, block on it
+        historyId = rxHistoryService.insertHistory(history).toBlocking().first();
+
+        // if recording session started by schedule, change state of schedule
         rxScheduleService.setScheduleState(intentData.foreignId(), Schedule.SCHEDULE_STATE_STARTED)
             .toBlocking()
             .first();
+      } else {
+        // if recording started by trigger, check if history for this trigger already exists, if not, create it
+        History h =
+            rxHistoryService.getHistoryByForeignIdAndType(intentData.foreignId(), intentData.type())
+                .toBlocking()
+                .first();
+
+        if (h == null) {
+          ContentValues history =
+              new History.ContentValuesBuilder().foreignId(intentData.foreignId())
+                  .type(intentData.type())
+                  .state(History.HISTORY_STATE_RECORDING)
+                  .startedRecordingDate(System.currentTimeMillis())
+                  .savedFiles(null)
+                  .build();
+
+          // create entry in history table, block on it
+          historyId = rxHistoryService.insertHistory(history).toBlocking().first();
+        } else {
+          historyId = h.id();
+        }
       }
 
       // if user has chosen to notify on start recording, notify him
       if (intentData.uploadConfiguration().notifyOnStartRecording()) {
-        //todo notification!
-        rxNotificationService.newNotification((int) newHistoryId, "Notification", "Probe..");
+        String msg;
+        if (intentData.type() == History.HISTORY_TYPE_SCHEDULE) {
+          msg = "Schedule started recording";
+        } else {
+          msg = "Trigger started recording";
+        }
+        rxNotificationService.newNotification((int) historyId, "Notification", msg);
       }
     };
   }
@@ -252,6 +301,7 @@ public class RxAudioRecorder {
    */
   private Func1<String, String> onFileRecorded(IntentData intentData) {
     return recordedFile -> {
+      //todo how to distinct trigger history ?
       History history;
       List<SavedFile> savedFiles;
 
@@ -269,7 +319,9 @@ public class RxAudioRecorder {
       }
 
       savedFiles = history.savedFiles();
-      savedFiles.add(SavedFile.create(recordedFile, System.currentTimeMillis(), false));
+
+      SavedFile newFile = SavedFile.create(recordedFile, System.currentTimeMillis(), false);
+      savedFiles.add(newFile);
 
       ContentValues updatedHistory =
           new History.ContentValuesBuilder().id(history.id()).savedFiles(savedFiles).build();
@@ -277,7 +329,13 @@ public class RxAudioRecorder {
       rxHistoryService.editHistory(updatedHistory).toBlocking().first();
 
       if (intentData.uploadConfiguration().dropboxUpload()) {
-        Timber.i("Uploading to dropbox...");
+        int positionInList = savedFiles.indexOf(newFile);
+        Uri baseUri = Uri.parse(Long.toString(history.id()));
+        baseUri = Uri.withAppendedPath(baseUri, Integer.toString(positionInList));
+        baseUri = Uri.withAppendedPath(baseUri,
+            Boolean.toString(intentData.uploadConfiguration().deleteAfterUpload()));
+        Timber.i("Uploading to dropbox... sync call on -> " + Thread.currentThread().getName());
+        syncObserver.onChange(true, baseUri);
       }
 
       return recordedFile;

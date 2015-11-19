@@ -5,9 +5,12 @@ import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import co.vgetto.har.R;
+import co.vgetto.har.Rx;
 import co.vgetto.har.ui.addoredit.model.RecordingConfigurationModel;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -30,7 +33,8 @@ public class RecordingConfigurationOnSubscribe
 
   private RecordingConfigurationModel recordingConfigurationModel;
 
-  public RecordingConfigurationOnSubscribe(View v, RecordingConfigurationModel recordingConfigurationModel) {
+  public RecordingConfigurationOnSubscribe(View v,
+      RecordingConfigurationModel recordingConfigurationModel) {
     ButterKnife.bind(this, v);
 
     if (recordingConfigurationModel == null) {
@@ -50,7 +54,8 @@ public class RecordingConfigurationOnSubscribe
     createObservable();
   }
 
-  private RecordingConfigurationModel handleInputErrors(RecordingConfigurationModel currentConfiguration) {
+  private RecordingConfigurationModel handleInputErrors(
+      RecordingConfigurationModel currentConfiguration) {
     this.duration.setError(currentConfiguration.handleDurationError());
     this.delayBetween.setError(currentConfiguration.handleDelayBetweenError());
     this.numOfRecordings.setError(currentConfiguration.handleNumOfRecordingsError());
@@ -58,10 +63,9 @@ public class RecordingConfigurationOnSubscribe
   }
 
   public void createObservable() {
-    Observable.combineLatest(
-        RxTextView.textChangeEvents(duration), RxTextView.textChangeEvents(delayBetween),
-        RxTextView.textChangeEvents(numOfRecordings), RxTextView.textChangeEvents(filePrefix),
-        RxTextView.textChangeEvents(folderName),
+    Observable.combineLatest(Rx.subscribeToTextChanges(duration),
+        Rx.subscribeToTextChanges(delayBetween), Rx.subscribeToTextChanges(numOfRecordings),
+        Rx.subscribeToTextChanges(filePrefix), Rx.subscribeToTextChanges(folderName),
         (TextViewTextChangeEvent durationChange, TextViewTextChangeEvent delayBetweenChange, TextViewTextChangeEvent numOfRecordingsChange, TextViewTextChangeEvent filePrefixChange, TextViewTextChangeEvent folderNameChange) -> {
           recordingConfigurationModel.setDuration(durationChange.text().toString());
           recordingConfigurationModel.setDelayBetween(delayBetweenChange.text().toString());

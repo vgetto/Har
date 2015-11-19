@@ -1,6 +1,7 @@
 package co.vgetto.har.rxservices;
 
 import android.content.SharedPreferences;
+import android.hardware.usb.UsbDevice;
 import rx.Observable;
 
 /**
@@ -26,6 +27,7 @@ public class RxSharedPreferences {
   protected final Observable<Boolean> spWriteString(String key, String value) {
     return getPreferencesEditor().map(editor -> {
       editor.putString(key, value);
+
       return editor.commit();
     });
   }

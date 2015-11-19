@@ -28,17 +28,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvHistoryStartedDate" />
+                android:id="@+id/tvHistoryStartTime" />
 
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:id="@+id/tvHistoryEndedDate" />
-
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/tvHistorySavedFiles" />
+              android:id="@+id/tvHistoryEndTime" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

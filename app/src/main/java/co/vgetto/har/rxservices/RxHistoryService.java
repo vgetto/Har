@@ -1,5 +1,8 @@
 package co.vgetto.har.rxservices;
 
+import co.vgetto.har.rxservices.RxDbService;
+
+
 import android.content.ContentValues;
 import android.content.Context;
 import co.vgetto.har.db.Db;

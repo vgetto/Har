@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import co.vgetto.har.R;
+import co.vgetto.har.Rx;
 import co.vgetto.har.ui.addoredit.model.AddOrEditTriggerModel;
 import co.vgetto.har.ui.addoredit.model.TriggerConfigurationModel;
 import co.vgetto.har.ui.addoredit.model.UploadConfigurationModel;
@@ -62,7 +63,7 @@ public class TriggerConfigurationOnSubscribe
 
   public void createObservable() {
     Observable.combineLatest(RxAdapterView.itemSelections(spinnerTriggerType),
-        RxTextView.textChangeEvents(etPhoneNumber), RxTextView.textChangeEvents(etSmsText), (Integer type, TextViewTextChangeEvent
+        Rx.subscribeToTextChanges(etPhoneNumber), Rx.subscribeToTextChanges(etSmsText), (Integer type, TextViewTextChangeEvent
             numberChange, TextViewTextChangeEvent smsChange) -> {
           triggerConfigurationModel.setType(type);
           // TODO based on type, hide/show etSmsText, also enable/disable next based on this

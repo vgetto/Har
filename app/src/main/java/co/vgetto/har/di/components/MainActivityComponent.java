@@ -7,6 +7,7 @@ import co.vgetto.har.di.modules.HistoryDetailModule;
 import co.vgetto.har.di.modules.HistoryListModule;
 import co.vgetto.har.di.modules.MainActivityModule;
 import co.vgetto.har.di.modules.ScheduleListModule;
+import co.vgetto.har.di.modules.SettingsModule;
 import co.vgetto.har.di.modules.TriggerListModule;
 import co.vgetto.har.di.scopes.MainActivityScope;
 import co.vgetto.har.ui.MainActivityController;
@@ -44,4 +45,5 @@ import dagger.Subcomponent;
 
   AddOrEditTriggerComponent plus(AddOrEditTriggerModule addOrEditTriggerModule);
 
+  SettingsComponent plus(SettingsModule settingsModule);
 }

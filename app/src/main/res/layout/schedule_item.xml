@@ -16,19 +16,18 @@
             android:layout_margin="5dp">
 
             <TextView
-                android:id="@+id/tvStartTime"
+                android:id="@+id/tvState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvStatus" />
+                android:id="@+id/tvStartTime" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvSynced" />
+          <include layout="@layout/recording_configuration_info_layout" />
+
+          <include layout="@layout/upload_configuration_info_layout" />
 
             <LinearLayout
                 android:layout_width="match_parent"

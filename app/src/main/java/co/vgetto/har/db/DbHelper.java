@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import co.vgetto.har.db.tables.HistoryTable;
 import co.vgetto.har.db.tables.SchedulesTable;
 import co.vgetto.har.db.tables.TriggersTable;
+import co.vgetto.har.db.tables.UserTable;
 
 /**
  * Created by Kovje on 25.8.2015..
@@ -19,6 +20,7 @@ public class DbHelper extends SQLiteOpenHelper {
   }
 
   @Override public void onCreate(SQLiteDatabase db) {
+    db.execSQL(UserTable.getUserTableQuery());
     db.execSQL(SchedulesTable.getScheduleLocalTableQuery());
     db.execSQL(TriggersTable.getTriggerLocalTableQuery());
     db.execSQL(HistoryTable.getLocalHistoryTableQuery());

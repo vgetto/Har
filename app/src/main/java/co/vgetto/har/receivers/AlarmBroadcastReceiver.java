@@ -33,27 +33,13 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     Timber.i("Alarm broadcast receiver fired ! " + Long.valueOf(new Date().getTime()));
     MyApplication.get(context).getAppComponent().inject(this);
 
-    Bundle b = new Bundle();
     long id = intent.getLongExtra("id", 0);
 
     // if id is valid, start recording !
     if (id != 0) {
       // get schedule from db
       Schedule schedule = rxScheduleService.getScheduleById(id).toBlocking().first();
-
-      // put schedule in intent
-      b.putParcelable("schedule", schedule);
-
-      // put type in bundle so the recording service knows which to take from
-      // bundle, either a schedule or trigger
-      b.putInt("type", History.HISTORY_TYPE_SCHEDULE);
-
-      // make intent
-      Intent audioIntent = new Intent(context, RecordAudioService.class);
-      audioIntent.putExtras(b);
-
-      // start recording !
-      context.startService(audioIntent);
+      RecordAudioService.startRecordingForSchedule(context, schedule);
     }
     wl.release();
   }

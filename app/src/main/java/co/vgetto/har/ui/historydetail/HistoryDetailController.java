@@ -2,6 +2,7 @@ package co.vgetto.har.ui.historydetail;
 
 import co.vgetto.har.Rx;
 import co.vgetto.har.db.entities.History;
+import co.vgetto.har.db.entities.SavedFile;
 import co.vgetto.har.db.entities.Trigger;
 import co.vgetto.har.rxservices.RxHistoryService;
 import co.vgetto.har.rxservices.RxTriggerService;
@@ -40,11 +41,11 @@ public class HistoryDetailController implements BaseController {
 
   @Override public void init(BaseModel savedModel) {
     if (savedModel != null) {
-      this.model = (HistoryDetailModel)savedModel;
+      this.model = (HistoryDetailModel) savedModel;
     } else {
       this.model = new HistoryDetailModel();
     }
-    mainActivityController.setTitle("History detail");
+    mainActivityController.setTitle("History details");
     setQuerySubscription();
   }
 
@@ -52,28 +53,20 @@ public class HistoryDetailController implements BaseController {
     return model;
   }
 
-  public void click(History h) {
-
-  }
-
   private void setQuerySubscription() {
-    querySubscription = rxHistoryService.getHistoryQueryObservable()
-        .map(histories -> {
-          for (History h : histories) {
-            if (h.id() == model.getHistoryId()) {
-              return h;
-            }
-          }
-          return null;
-        })
-        .compose(Rx.schedulersIoUi())
-        .subscribe(historyItem -> {
-          // set data
-          if (historyItem != null) {
-            iTalkToHistoryDetailLayout.setData(historyItem);
-          }
-          // todo show error, but error shouldn't happen !
-        });
+    querySubscription = rxHistoryService.getHistoryQueryObservable().map(histories -> {
+      for (History h : histories) {
+        if (h.id() == model.getHistoryId()) {
+          return h;
+        }
+      }
+      return null;
+    }).compose(Rx.schedulersIoUi()).subscribe(historyItem -> {
+      // set data
+      if (historyItem != null) {
+        iTalkToHistoryDetailLayout.setAdapterData(historyItem.savedFiles());
+      }
+    });
   }
 
   public void clearQuerySubscription() {
@@ -86,6 +79,6 @@ public class HistoryDetailController implements BaseController {
   }
 
   public interface ITalkToHistoryDetailLayout {
-    void setData(History h);
+    void setAdapterData(List<SavedFile> fileList);
   }
 }

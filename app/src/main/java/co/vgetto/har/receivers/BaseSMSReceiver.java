@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.telephony.SmsMessage;
+import co.vgetto.har.MyApplication;
+import co.vgetto.har.rxservices.RxTriggerService;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -13,8 +16,8 @@ import timber.log.Timber;
  */
 // https://gist.github.com/tom-dignan/2318886
 public abstract class BaseSMSReceiver extends BroadcastReceiver {
+  @Inject RxTriggerService rxTriggerService;
   public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-  public static final String ACTION_SMS_SENT = "android.provider.Telephony.SMS_SENT";
   private static final String EXTRA_PDUS = "pdus";
 
   private Pair<String, String> getSmsData(Bundle bundle) {
@@ -25,11 +28,12 @@ public abstract class BaseSMSReceiver extends BroadcastReceiver {
       smsMessage[n] = SmsMessage.createFromPdu((byte[]) messages[n]);
     }
 
-    return new Pair<>(smsMessage[0].getMessageBody().toString().toUpperCase(),
-        smsMessage[0].getOriginatingAddress());
+    return new Pair<>(smsMessage[0].getOriginatingAddress(), smsMessage[0].getMessageBody().toString());
   }
 
   @Override public void onReceive(Context context, Intent intent) {
+    MyApplication.get(context).getAppComponent().inject(this);
+
     String action = intent.getAction();
     if (action != null && action.equals(ACTION_SMS_RECEIVED)) {
       Pair<String, String> smsData = getSmsData(intent.getExtras());
@@ -38,5 +42,6 @@ public abstract class BaseSMSReceiver extends BroadcastReceiver {
     }
   }
 
-  protected void onIncomingSMS(Context context, String phoneNumber, String smsText){}
+  protected void onIncomingSMS(Context context, String phoneNumber, String smsText) {
+  }
 }

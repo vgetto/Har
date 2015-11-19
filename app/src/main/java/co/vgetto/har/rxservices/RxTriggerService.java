@@ -1,7 +1,12 @@
 package co.vgetto.har.rxservices;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import co.vgetto.har.audio.RecordAudioService;
 import co.vgetto.har.db.Db;
+import co.vgetto.har.db.entities.History;
 import co.vgetto.har.db.entities.Trigger;
 import co.vgetto.har.db.tables.TriggersTable;
 import java.util.List;
@@ -58,4 +63,5 @@ public final class RxTriggerService {
   public final Observable<Trigger> findTriggerByTypeAndPhoneNumber(int type, String phoneNumber) {
     return rxDbService.get(Trigger.class, Trigger.selectionByTypeAndPhoneNumber, Db.getSelectionArgsForTypeAndPhoneNumber(type, phoneNumber), null).map(Trigger.SINGLE_MAPPER);
   }
+
 }

@@ -1,6 +1,7 @@
 package co.vgetto.har.audio;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -12,6 +13,8 @@ import co.vgetto.har.db.entities.configurations.RecordingConfiguration;
 import co.vgetto.har.db.entities.configurations.UploadConfiguration;
 import co.vgetto.har.db.entities.Schedule;
 import javax.inject.Inject;
+import rx.plugins.RxJavaObservableExecutionHook;
+import rx.plugins.RxJavaPlugins;
 import rx.subjects.PublishSubject;
 
 /**
@@ -28,6 +31,32 @@ public class RecordAudioService extends Service {
   private PowerManager.WakeLock wakeLock;
 
   public RecordAudioService() {
+  }
+
+  public static void startRecordingForTrigger(Context context, Trigger trigger) {
+    Bundle b = new Bundle();
+    b.putParcelable("trigger", trigger);
+    b.putInt("type", History.HISTORY_TYPE_TRIGGER);
+
+    // make intent
+    Intent audioIntent = new Intent(context, RecordAudioService.class);
+    audioIntent.putExtras(b);
+
+    // start recording !
+    context.startService(audioIntent);
+  }
+
+  public static void startRecordingForSchedule(Context context, Schedule schedule) {
+    Bundle b = new Bundle();
+    b.putParcelable("schedule", schedule);
+    b.putInt("type", History.HISTORY_TYPE_SCHEDULE);
+
+    // make intent
+    Intent audioIntent = new Intent(context, RecordAudioService.class);
+    audioIntent.putExtras(b);
+
+    // start recording !
+    context.startService(audioIntent);
   }
 
   /**
