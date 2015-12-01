@@ -9,12 +9,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.v4.app.NotificationManagerCompat;
 import co.vgetto.har.Constants;
 import co.vgetto.har.di.scopes.ApplicationScope;
 import co.vgetto.har.syncadapter.SyncObserver;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
 import dagger.Module;
 import dagger.Provides;
@@ -56,7 +53,7 @@ import timber.log.Timber;
     Account newAccount = new Account(Constants.ACCOUNT, Constants.ACCOUNT_TYPE);
     // Get an instance of the Android account manager
     AccountManager accountManager =
-        (AccountManager) context.getSystemService(context.ACCOUNT_SERVICE);
+        (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
 
     Account[] existing = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
 

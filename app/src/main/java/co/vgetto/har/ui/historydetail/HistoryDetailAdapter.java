@@ -4,14 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import co.vgetto.har.R;
-import co.vgetto.har.db.entities.History;
 import co.vgetto.har.db.entities.SavedFile;
-import co.vgetto.har.ui.historylist.HistoryListLayout;
-import com.jakewharton.rxbinding.view.RxView;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.TimeZone;
@@ -28,6 +26,7 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
     @Bind(R.id.tvFilePath) TextView tvFilePath;
     @Bind(R.id.tvRecordedAt) TextView tvRecordedAt;
     @Bind(R.id.tvSynced) TextView tvSynced;
+    @Bind(R.id.btnPlay) Button btnPlay;
 
     public IMyViewHolderClicks mListener;
 
@@ -35,7 +34,10 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
       super(v);
       ButterKnife.bind(this, v);
       this.mListener = listener;
-      v.setOnClickListener(this);
+      //  v.setOnClickListener(this);
+      btnPlay.setTag(R.id.type_tag, "play");
+      btnPlay.setOnClickListener(this);
+
       //    mTextView = (TextView)v.findViewById(R.id.tvSchedule);
 
             /*
@@ -47,20 +49,21 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
     }
 
     @Override public void onClick(View v) {
-            /*
-            if (v instanceof TextView) {
-                int[] location = new int[2];
-                v.getLocationOnScreen(location);
-                Timber.i("Location of clicked button : " + Integer.toString(location[0]) + " " + Integer.toString(location[1]));
-                int position = getAdapterPosition();
-                String tag = (String) v.getTag(R.id.type_tag);
-                if (tag.equals("edit")) {
-                    mListener.onEdit(position);
-                } else {
-                    mListener.onDelete(position);
-                }
-            }
-            */
+      /*
+      if (v instanceof TextView) {
+        int[] location = new int[2];
+        v.getLocationOnScreen(location);
+        Timber.i("Location of clicked button : " + Integer.toString(location[0]) + " "
+            + Integer.toString(location[1]));
+        int position = getAdapterPosition();
+        String tag = (String) v.getTag(R.id.type_tag);
+        if (tag.equals("edit")) {
+          mListener.onEdit(position);
+        } else {
+          mListener.onDelete(position);
+        }
+      }
+      */
       mListener.cardClicked(getAdapterPosition());
     }
 
@@ -73,7 +76,8 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
   @Override public HistoryDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
       int viewType) {
     // create a new view
-    View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_detail, parent, false);
+    View v =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.history_detail, parent, false);
     // set the view's size, margins, paddings and layout parameters
 
     HistoryDetailAdapter.ViewHolder vh = new ViewHolder(v, new ViewHolder.IMyViewHolderClicks() {

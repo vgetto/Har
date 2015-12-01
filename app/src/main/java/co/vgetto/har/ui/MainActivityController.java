@@ -2,6 +2,7 @@ package co.vgetto.har.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import co.vgetto.har.ui.addoredit.addedittrigger.AddOrEditTriggerController;
 import co.vgetto.har.ui.addoredit.addedittrigger.AddOrEditTriggerLayout;
@@ -109,6 +110,7 @@ public class MainActivityController implements BaseController{
     void showSnackbar(String snackbarText);
     void setTitle(String title);
     void login();
+    FragmentManager getFrManager();
   }
 
 }

@@ -4,19 +4,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import co.vgetto.har.R;
 import co.vgetto.har.db.entities.History;
-import co.vgetto.har.db.entities.Trigger;
-import co.vgetto.har.ui.triggerlist.TriggerListLayout;
 import com.jakewharton.rxbinding.view.RxView;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.TimeZone;
-import timber.log.Timber;
 
 /**
  * Created by Kovje on 12.9.2015..
@@ -122,7 +118,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     switch (h.state()) {
       case History.HISTORY_STATE_RECORDING:
-        state = "Recording is in progres...";
+        state = "Recording is in progress...";
         startTime = df.format(h.startedRecordingDate());
         holder.tvHistoryState.setText(state);
         holder.tvHistoryStartedDate.setText("Recording started at : " + startTime);

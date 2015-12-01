@@ -6,15 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import co.vgetto.har.MyApplication;
 import co.vgetto.har.db.entities.History;
+import co.vgetto.har.db.entities.Schedule;
 import co.vgetto.har.db.entities.Trigger;
 import co.vgetto.har.db.entities.configurations.RecordingConfiguration;
 import co.vgetto.har.db.entities.configurations.UploadConfiguration;
-import co.vgetto.har.db.entities.Schedule;
 import javax.inject.Inject;
-import rx.plugins.RxJavaObservableExecutionHook;
-import rx.plugins.RxJavaPlugins;
 import rx.subjects.PublishSubject;
 
 /**

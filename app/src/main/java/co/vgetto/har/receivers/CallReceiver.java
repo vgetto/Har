@@ -1,21 +1,18 @@
 package co.vgetto.har.receivers;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.internal.app.WindowDecorActionBar;
+import co.vgetto.har.Rx;
 import co.vgetto.har.audio.RecordAudioService;
-import co.vgetto.har.db.entities.History;
-import co.vgetto.har.db.entities.Schedule;
-import co.vgetto.har.db.entities.Trigger;
 import co.vgetto.har.db.entities.configurations.TriggerConfiguration;
 import java.util.Date;
+import rx.Subscription;
 import timber.log.Timber;
 
 /**
  * Created by Kovje on 15.10.2015..
  */
 public class CallReceiver extends BaseCallReceiver {
+  private Subscription handleCallSubscription;
 
   @Override protected void onIncomingCallStarted(Context ctx, String number, Date start) {
     Timber.i("Incoming call started " + number);
@@ -41,14 +38,13 @@ public class CallReceiver extends BaseCallReceiver {
   }
 
   private void handleAllCalls(Context context, int type, String phoneNumber) {
-    //todo blocks on main thread, don't block the main thread!
-    Timber.i("BLOCKING ON THREAD -> " + Thread.currentThread().getName());
-    Trigger trigger =
-        rxTriggerService.findTriggerByTypeAndPhoneNumber(type, phoneNumber).toBlocking().first();
-
     // if trigger for this phone number and call type exist, start recording
-    if (trigger != null) {
-      RecordAudioService.startRecordingForTrigger(context, trigger);
-    }
+    handleCallSubscription = rxTriggerService.findTriggerByTypeAndPhoneNumber(type, phoneNumber)
+        .compose(Rx.schedulerIoIo())
+        .filter(trigger -> trigger != null)
+        .subscribe(triggerNotNull -> RecordAudioService.startRecordingForTrigger(context, triggerNotNull),
+            error -> Timber.i("Error when handling call -> " + error.getMessage()));
+
+
   }
 }

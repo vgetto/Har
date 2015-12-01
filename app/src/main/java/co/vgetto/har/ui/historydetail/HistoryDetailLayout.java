@@ -3,35 +3,24 @@ package co.vgetto.har.ui.historydetail;
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import co.vgetto.har.MyApplication;
 import co.vgetto.har.R;
-import co.vgetto.har.Rx;
-import co.vgetto.har.db.entities.History;
 import co.vgetto.har.db.entities.SavedFile;
-import co.vgetto.har.db.entities.Trigger;
 import co.vgetto.har.di.modules.HistoryDetailModule;
-import co.vgetto.har.di.modules.TriggerListModule;
+import co.vgetto.har.ui.MainActivityController;
 import co.vgetto.har.ui.base.BaseController;
 import co.vgetto.har.ui.base.BaseLayout;
 import co.vgetto.har.ui.base.BaseModel;
-import co.vgetto.har.ui.historylist.HistoryAdapter;
-import co.vgetto.har.ui.rxanimation.RxViewAnimation;
-import co.vgetto.har.ui.triggerlist.TriggerAdapter;
-import co.vgetto.har.ui.triggerlist.TriggerListController;
 import com.jakewharton.rxbinding.view.RxView;
 import java.util.List;
 import javax.inject.Inject;
-import org.w3c.dom.Text;
-import rx.Subscription;
 import timber.log.Timber;
 
 /**
@@ -43,6 +32,8 @@ public class HistoryDetailLayout extends FrameLayout
   @Inject Context context;
 
   @Inject HistoryDetailController controller;
+
+  @Inject MainActivityController.ITalkToMainActivity iTalkToMainActivity;
 
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
 
@@ -117,7 +108,16 @@ public class HistoryDetailLayout extends FrameLayout
   }
 
   @Override public void cardClicked(SavedFile file) {
-
+    Timber.i("Card in details clicked -> " + file.toString());
+    /*
+    Intent viewIntent = new Intent(Intent.ACTION_VIEW);
+    File openedFile = new File(file.filePath());
+    viewIntent.setDataAndType(Uri.fromFile(openedFile), "audio/*");
+    context.startActivity(Intent.createChooser(viewIntent, null).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    */
+    Timber.i("Context in layout -> " + this.toString());
+    NoticeDialogFragment dialogFragment = new NoticeDialogFragment();
+    dialogFragment.show(iTalkToMainActivity.getFrManager(), "teg");
   }
 
   @Override public void setAdapterData(List<SavedFile> fileList) {

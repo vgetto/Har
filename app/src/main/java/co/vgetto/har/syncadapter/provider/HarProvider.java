@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import co.vgetto.har.Constants;
 import co.vgetto.har.MyApplication;
-import co.vgetto.har.db.entities.Schedule;
 import co.vgetto.har.db.tables.HistoryTable;
 import co.vgetto.har.db.tables.SchedulesTable;
 import co.vgetto.har.db.tables.TriggersTable;
@@ -70,7 +69,7 @@ public class HarProvider extends ContentProvider {
   @Override public Uri insert(Uri uri, ContentValues values) {
     long id = writeableDatabase.insert(getTableByUri(uri), null, values);
     if (id != 0) {
-      getContext().getContentResolver().notifyChange(uri, null);
+      getContext().getContentResolver().notifyChange(uri, null, false);
       return Uri.withAppendedPath(uri, Long.toString(id));
     }
     return null;
@@ -82,7 +81,7 @@ public class HarProvider extends ContentProvider {
   @Override public int delete(Uri uri, String selection, String[] selectionArgs) {
     int rowsAffected = writeableDatabase.delete(getTableByUri(uri), selection, selectionArgs);
     if (rowsAffected != 0) {
-      getContext().getContentResolver().notifyChange(uri, null);
+      getContext().getContentResolver().notifyChange(uri, null, false);
     }
     return rowsAffected;
   }
@@ -93,7 +92,7 @@ public class HarProvider extends ContentProvider {
   public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
     int rowsAffected = writeableDatabase.update(getTableByUri(uri), values, selection, selectionArgs);
     if (rowsAffected != 0) {
-      getContext().getContentResolver().notifyChange(uri, null);
+      getContext().getContentResolver().notifyChange(uri, null, false);
     }
     return rowsAffected;
   }

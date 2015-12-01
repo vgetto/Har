@@ -23,7 +23,6 @@ import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
@@ -280,6 +279,18 @@ public class RxAudioRecorder {
           historyId = rxHistoryService.insertHistory(history).toBlocking().first();
         } else {
           historyId = h.id();
+
+          // edit history so the user sees it started recording again by that trigger
+          ContentValues updatedHistory = new History.ContentValuesBuilder()
+              .id(h.id())
+              .foreignId(h.foreignId())
+              .type(h.type())
+              .state(History.HISTORY_STATE_RECORDING)
+              .startedRecordingDate(System.currentTimeMillis())
+              .savedFiles(h.savedFiles())
+              .build();
+
+          rxHistoryService.editHistory(updatedHistory).toBlocking().first();
         }
       }
 

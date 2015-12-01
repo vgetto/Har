@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,25 +21,17 @@ import butterknife.ButterKnife;
 import co.vgetto.har.MyApplication;
 import co.vgetto.har.R;
 import co.vgetto.har.Rx;
-import co.vgetto.har.db.Db;
-import co.vgetto.har.db.entities.SavedFile;
 import co.vgetto.har.db.entities.User;
 import co.vgetto.har.rxservices.RxUserService;
-import co.vgetto.har.ui.backstack.SavedBackstackFragment;
 import co.vgetto.har.ui.backstack.Backstack;
+import co.vgetto.har.ui.backstack.SavedBackstackFragment;
 import co.vgetto.har.ui.base.BaseModel;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AppKeyPair;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
-import rx.Observable;
 import rx.Subscription;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
@@ -289,5 +280,9 @@ public class MainActivity extends AppCompatActivity
 
   @Override public void login() {
     mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
+  }
+
+  @Override public android.support.v4.app.FragmentManager getFrManager() {
+    return getSupportFragmentManager();
   }
 }
