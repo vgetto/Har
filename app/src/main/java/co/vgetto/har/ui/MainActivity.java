@@ -22,6 +22,7 @@ import co.vgetto.har.MyApplication;
 import co.vgetto.har.R;
 import co.vgetto.har.Rx;
 import co.vgetto.har.db.entities.User;
+import co.vgetto.har.rxservices.RxConfigurationValuesService;
 import co.vgetto.har.rxservices.RxUserService;
 import co.vgetto.har.ui.backstack.Backstack;
 import co.vgetto.har.ui.backstack.SavedBackstackFragment;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity
   @Inject AppKeyPair appKeyPair;
 
   @Inject RxUserService rxUserService;
+
+  @Inject RxConfigurationValuesService rxConfigurationValuesService;
 
   @Bind(R.id.drawerLayout) DrawerLayout drawerLayout;
 
@@ -145,7 +148,8 @@ public class MainActivity extends AppCompatActivity
         // Required to complete auth, sets the access token on the session
         mDBApi.getSession().finishAuthentication();
         String accessToken = mDBApi.getSession().getOAuth2AccessToken();
-        rxUserService.loginToDropbox(new User.ContentValuesBuilder().token(accessToken).email("email").build())
+        rxUserService.loginToDropbox(
+            new User.ContentValuesBuilder().token(accessToken).email("email").build())
             .compose(Rx.schedulersIoUi())
             .doOnCompleted(() -> mDBApi.getSession().unlink())
             .subscribe(aLong -> Timber.i("Successfully logged in"),
@@ -153,8 +157,6 @@ public class MainActivity extends AppCompatActivity
       } catch (IllegalStateException e) {
         Timber.i("Error authenticating");
       }
-
-
     }
   }
 

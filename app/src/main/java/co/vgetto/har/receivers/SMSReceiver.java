@@ -14,8 +14,6 @@ public class SMSReceiver extends BaseSMSReceiver {
   private Subscription handleSmsSubscription;
 
   @Override protected void onIncomingSMS(Context context, String phoneNumber, String smsText) {
-    Timber.i("BLOCKING ON THREAD -> " + Thread.currentThread().getName());
-    Timber.i("Sms received from " + phoneNumber + " with text : " + smsText);
     // try to find in db, if exists trigger recording !
     // if there is a trigger of "incoming sms" type for this number, and the
     // sms text is equal to received sms, start recording !

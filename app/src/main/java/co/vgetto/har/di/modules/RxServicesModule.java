@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import co.vgetto.har.rxservices.RxConfigurationValuesService;
 import co.vgetto.har.rxservices.RxDbService;
 import co.vgetto.har.rxservices.RxHistoryService;
 import co.vgetto.har.rxservices.RxNotificationService;
@@ -50,5 +51,9 @@ import dagger.Provides;
 
   @Provides @ApplicationScope RxUserService providesRxUserService(RxDbService rxDbService, AppKeyPair appKeyPair) {
     return new RxUserService(rxDbService, appKeyPair);
+  }
+
+  @Provides @ApplicationScope RxConfigurationValuesService providerRxConfigurationValuesService(Context context, RxDbService rxDbService) {
+    return new RxConfigurationValuesService(context, rxDbService);
   }
 }

@@ -5,14 +5,19 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/AddOrEditTriggerComponent.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/HistoryDetailComponent.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/HistoryListComponent.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/RecordingConfigurationComponent.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/ScheduleListComponent.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/components/TriggerListComponent.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/AddOrEditScheduleModule.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/AddOrEditTriggerModule.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/HistoryDetailModule.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/HistoryListModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/RecordingConfigurationModule.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/ScheduleListModule.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/di/modules/TriggerListModule.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/addoredit/recconfig/RecordingConfigurationAdapter.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/addoredit/recconfig/RecordingConfigurationController.java" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/addoredit/recconfig/RecordingConfigurationLayout.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historydetail/HistoryDetailController.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historydetail/HistoryDetailLayout.java" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/co/vgetto/har/ui/historydetail/HistoryDetailPresenter.java" charset="windows-1250" />

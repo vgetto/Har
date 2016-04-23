@@ -10,11 +10,11 @@ import co.vgetto.har.db.entities.History;
 import co.vgetto.har.db.entities.Schedule;
 import co.vgetto.har.db.entities.Trigger;
 import co.vgetto.har.db.entities.User;
+import co.vgetto.har.db.tables.ConfigurationValuesTable;
 import co.vgetto.har.db.tables.HistoryTable;
 import co.vgetto.har.db.tables.SchedulesTable;
 import co.vgetto.har.db.tables.TriggersTable;
 import co.vgetto.har.db.tables.UserTable;
-import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.squareup.sqlbrite.BriteContentResolver;
 import com.squareup.sqlbrite.QueryObservable;
 import rx.Observable;
@@ -44,8 +44,10 @@ public class RxDbService {
       return new Pair<>(Constants.BASE_TRIGGER_URI, TriggersTable.projection);
     } else if (c.equals(History.class)) {
       return new Pair<>(Constants.BASE_HISTORY_URI, HistoryTable.projection);
-    } else {
+    } else if (c.equals(User.class)){
       return new Pair<>(Constants.BASE_USER_URI, UserTable.projection);
+    } else {
+      return new Pair<>(Constants.BASE_CONFIGURATION_VALUES_URI, ConfigurationValuesTable.projection);
     }
   }
 

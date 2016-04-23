@@ -13,7 +13,7 @@ public class UserTable {
   private static final String userColumns = " (" +
       ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
       TOKEN + " TEXT," +
-      EMAIL + " EMAIL" +
+      EMAIL + " VALUE" +
       ")";
 
   public static String getUserTableQuery() {

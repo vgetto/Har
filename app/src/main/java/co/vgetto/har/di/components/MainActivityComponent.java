@@ -1,19 +1,19 @@
 package co.vgetto.har.di.components;
 
-import co.vgetto.har.db.entities.History;
 import co.vgetto.har.di.modules.AddOrEditScheduleModule;
 import co.vgetto.har.di.modules.AddOrEditTriggerModule;
 import co.vgetto.har.di.modules.HistoryDetailModule;
 import co.vgetto.har.di.modules.HistoryListModule;
 import co.vgetto.har.di.modules.MainActivityModule;
+import co.vgetto.har.di.modules.RecordingConfigurationModule;
 import co.vgetto.har.di.modules.ScheduleListModule;
 import co.vgetto.har.di.modules.SettingsModule;
 import co.vgetto.har.di.modules.TriggerListModule;
 import co.vgetto.har.di.scopes.MainActivityScope;
-import co.vgetto.har.ui.MainActivityController;
-import co.vgetto.har.ui.backstack.Backstack;
 import co.vgetto.har.ui.MainActivity;
+import co.vgetto.har.ui.MainActivityController;
 import co.vgetto.har.ui.MainActivityPresenter;
+import co.vgetto.har.ui.backstack.Backstack;
 import dagger.Subcomponent;
 /**
  * Created by Kovje on 23.8.2015..
@@ -44,6 +44,8 @@ import dagger.Subcomponent;
   AddOrEditScheduleComponent plus(AddOrEditScheduleModule addOrEditScheduleModule);
 
   AddOrEditTriggerComponent plus(AddOrEditTriggerModule addOrEditTriggerModule);
+
+  RecordingConfigurationComponent plus(RecordingConfigurationModule recordingConfigurationModule);
 
   SettingsComponent plus(SettingsModule settingsModule);
 }

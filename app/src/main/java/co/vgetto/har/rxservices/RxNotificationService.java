@@ -6,14 +6,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import co.vgetto.har.db.entities.History;
 import co.vgetto.har.ui.MainActivity;
 
 /**
  * Created by Kovje on 8.11.2015..
  */
-public class RxNotificationService {
+public final class RxNotificationService {
   private final Context context;
   private final NotificationManager notificationManager;
 

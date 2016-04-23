@@ -12,15 +12,16 @@ import co.vgetto.har.MyApplication;
 import co.vgetto.har.R;
 import co.vgetto.har.Rx;
 import co.vgetto.har.di.modules.AddOrEditScheduleModule;
-import co.vgetto.har.ui.animation.AnimateEntrance;
-import co.vgetto.har.ui.animation.AnimateExit;
-import co.vgetto.har.ui.animation.BaseAnimationObservable;
 import co.vgetto.har.ui.UiConstants;
-import co.vgetto.har.ui.base.BaseController;
-import co.vgetto.har.ui.base.BaseModel;
+import co.vgetto.har.ui.addoredit.recconfig.RecordingConfigurationLayout;
 import co.vgetto.har.ui.addoredit.base.BaseAddEditLayout;
 import co.vgetto.har.ui.addoredit.model.AddOrEditScheduleModel;
 import co.vgetto.har.ui.addoredit.rx.PageSubscriptions;
+import co.vgetto.har.ui.animation.AnimateEntrance;
+import co.vgetto.har.ui.animation.AnimateExit;
+import co.vgetto.har.ui.animation.BaseAnimationObservable;
+import co.vgetto.har.ui.base.BaseController;
+import co.vgetto.har.ui.base.BaseModel;
 import com.jakewharton.rxbinding.view.RxView;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,8 @@ public class AddOrEditScheduleLayout extends LinearLayout implements BaseAddEdit
 
     pageList.add(inflater.inflate(R.layout.date_picker_layout, null));
     pageList.add(inflater.inflate(R.layout.time_picker_layout, null));
-    pageList.add(inflater.inflate(R.layout.recording_configuration_layout, null));
+    //pageList.add(inflater.inflate(R.layout.recording_configuration_layout, null));
+    pageList.add(new RecordingConfigurationLayout(context, null));
     pageList.add(inflater.inflate(R.layout.upload_configuration_layout, null));
   }
 
@@ -163,10 +165,12 @@ public class AddOrEditScheduleLayout extends LinearLayout implements BaseAddEdit
         break;
       case AddOrEditScheduleController.RECORDING_CONFIGURATION_LAYOUT:
         setButtonsEnabled(true, false);
+/*
         currentLayoutSubscription =
             PageSubscriptions.setRecordingConfigurationObservable(currentView, model)
                 .subscribe(recordingConfigurationModel -> controller.recordingConfigurationChanged(
                     recordingConfigurationModel));
+*/
         break;
       case AddOrEditScheduleController.SAVING_AND_NOTIFYING_LAYOUT:
         setButtonsEnabled(true, true);

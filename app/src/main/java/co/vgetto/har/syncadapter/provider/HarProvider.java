@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import co.vgetto.har.Constants;
 import co.vgetto.har.MyApplication;
+import co.vgetto.har.db.tables.ConfigurationValuesTable;
 import co.vgetto.har.db.tables.HistoryTable;
 import co.vgetto.har.db.tables.SchedulesTable;
 import co.vgetto.har.db.tables.TriggersTable;
@@ -33,6 +34,7 @@ public class HarProvider extends ContentProvider {
   private static final int LOCAL_TRIGGER = 2;
   private static final int LOCAL_HISTORY = 3;
   private static final int USER = 4;
+  private static final int CONFIGURATION_VALUES = 5;
 
   private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -41,6 +43,7 @@ public class HarProvider extends ContentProvider {
     sURIMatcher.addURI(Constants.AUTHORITY, "/trigger", LOCAL_TRIGGER);
     sURIMatcher.addURI(Constants.AUTHORITY, "/history", LOCAL_HISTORY);
     sURIMatcher.addURI(Constants.AUTHORITY, "/user", USER);
+    sURIMatcher.addURI(Constants.AUTHORITY, "/configurationValues", CONFIGURATION_VALUES);
   }
 
   @Override public boolean onCreate() {
@@ -105,8 +108,10 @@ public class HarProvider extends ContentProvider {
         return TriggersTable.TABLE;
       case USER:
         return UserTable.TABLE;
-      default:
+      case LOCAL_HISTORY:
         return HistoryTable.TABLE;
+      default:
+        return ConfigurationValuesTable.TABLE;
     }
   }
 }
